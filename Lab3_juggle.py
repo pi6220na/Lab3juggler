@@ -39,7 +39,7 @@ def create_db():
 def add_to_db(cur, db, name, country, catches):
 
     with db:
-        cur.execute('insert into juggler values (?,?, ?)', (name, country, catches))
+        cur.execute('insert into juggler values (?,?,?)', (name, country, catches))
         #cur.execute('insert into phones values ("%s", %d)'% (brand, version))
 
     #for row in cur.execute('select * from juggler'):
@@ -81,23 +81,24 @@ def print_menu():
 
 
 def update_juggler(cur, db):
-    name = input('Enter the name of the juggler to update: ')
-    catches = int(input('Enter the correct number of catches: '))
+    name_in = input('Enter the name of the juggler to update: ')
+    catches_in = int(input('Enter the correct number of catches: '))
 
     with db:
-        cur.execute('update juggler set catches is (?)', catches, ' where name = ', name)
+        cur.execute('update juggler set catches = ? where name = ?', (catches_in, name_in))
 
 
 def delete_juggler(cur, db):
     print("")
     inp_name = input('Enter the name of the juggler: ')
-    with db:
-        cur.execute('delete from juggler where name is (?)', (inp_name,))
+    #with db:
+    cur.execute('delete from juggler where name = ?', (inp_name,))
 
 
 def print_db(cur, db):
 
     print('')
+    #with db:
     for row in cur.execute('select * from juggler'):
         print(row)
 
