@@ -17,10 +17,10 @@ def create_db():
     try:
 
         db = sqlite3.connect('jugglers_db.db')
+
         cur = db.cursor()
 
         cur.execute('create table if NOT EXISTS juggler (name text, country text, catches int)')
-
 
     except sqlite3.Error as e:
         print('rolling back changes because of error' , e)
@@ -34,18 +34,11 @@ def create_db():
 
 def add_to_db(cur, db, name, country, catches):
 
-    try:
-        with db:
-            cur.execute('insert into juggler values (?,?,?)', (name, country, catches))
+    with db:
+        cur.execute('insert into juggler values (?,?,?)', (name, country, catches))
 
-    except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
-        traceback.print_exc()
-        db.rollback()
 
-    finally:
-
-        return cur, db
+    return cur, db
 
 
 def print_menu():
@@ -73,18 +66,11 @@ def print_menu():
 
 
 def update_juggler(cur, db):
-
     name_in = input('Enter the name of the juggler to update: ')
     catches_in = int(input('Enter the correct number of catches: '))
 
-    try:
-        with db:
-            cur.execute('update juggler set catches = ? where name = ?', (catches_in, name_in))
-
-    except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
-        traceback.print_exc()
-        db.rollback()
+    with db:
+        cur.execute('update juggler set catches = ? where name = ?', (catches_in, name_in))
 
 
 def delete_juggler(cur, db):
@@ -92,28 +78,16 @@ def delete_juggler(cur, db):
     print("")
     inp_name = input('Enter the name of the juggler: ')
 
-    try:
-        with db:
-            cur.execute('delete from juggler where name = ?', (inp_name,))
-
-    except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
-        traceback.print_exc()
-        db.rollback()
+    with db:
+        cur.execute('delete from juggler where name = ?', (inp_name,))
 
 
 def print_db(cur, db):
 
     print('')
-    try:
-        with db:
-            for row in cur.execute('select * from juggler'):
-                print(row)
-
-    except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
-        traceback.print_exc()
-        db.rollback()
+    with db:
+        for row in cur.execute('select * from juggler'):
+            print(row)
 
 
 def main():
