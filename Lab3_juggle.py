@@ -39,9 +39,8 @@ def add_to_db(cur, db, name, country, catches):
             cur.execute('insert into juggler values (?,?,?)', (name, country, catches))
 
     except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
+        print('Database error: ', e)
         traceback.print_exc()
-        db.rollback()
 
     finally:
 
@@ -82,9 +81,8 @@ def update_juggler(cur, db):
             cur.execute('update juggler set catches = ? where name = ?', (catches_in, name_in))
 
     except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
+        print('Database error: ', e)
         traceback.print_exc()
-        db.rollback()
 
 
 def delete_juggler(cur, db):
@@ -97,23 +95,20 @@ def delete_juggler(cur, db):
             cur.execute('delete from juggler where name = ?', (inp_name,))
 
     except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
+        print('Database error: ', e)
         traceback.print_exc()
-        db.rollback()
 
 
 def print_db(cur, db):
 
     print('')
     try:
-        with db:
-            for row in cur.execute('select * from juggler'):
-                print(row)
+        for row in cur.execute('select * from juggler'):
+            print(row)
 
     except sqlite3.Error as e:
-        print('rolling back changes because of error', e)
+        print('Database error: ', e)
         traceback.print_exc()
-        db.rollback()
 
 
 def main():
